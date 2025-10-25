@@ -152,9 +152,12 @@ jobs:
           make -j$(nproc)
           macdeployqt vulkanCapsViewer.app -dmg
           cp vulkanCapsviewer.dmg Vulkan_Caps_Viewer-osx-x86_64.dmg
-      - name: Upload
-        if: github.ref == 'refs/heads/master'
-        run: curl -T Vulkan_Caps_Viewer-osx-x86_64.dmg  ftp://${{ secrets.FTP_USER_NAME }}:${{ secrets.FTP_PASS }}@${{ secrets.FTP_SERVER_NAME }}          
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: "Vulkan_Caps_Viewer-osx-x86_64"
+          path: "Vulkan_Caps_Viewer-osx-x86_64.dmg"      
+        
 
   build_windows:
     name: Build Windows (64 bit)
