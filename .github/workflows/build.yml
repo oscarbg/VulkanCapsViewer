@@ -155,6 +155,48 @@ jobs:
           path: "Vulkan_Caps_Viewer-osx-x86_64.dmg"      
         
 
+  build_macosx_arm:
+    name: Build macOS arm64
+    runs-on: macos-15
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: "recursive"
+
+      - name: Select Xcode version
+        run: sudo xcode-select -s '/Applications/Xcode_16.4.app/Contents/Developer'          
+
+      - uses: jurplel/install-qt-action@v4
+        with:
+          version: 5.12.9
+          host: mac
+
+      - name: Prepare Vulkan SDK
+        uses: humbletim/setup-vulkan-sdk@v1.2.1
+        with:
+          vulkan-query-version: 1.4.304.1
+          vulkan-components: Vulkan-Headers, Vulkan-Loader
+          vulkan-use-cache: true
+
+      - name: Build
+        env:
+          TARGET_PLATFORM: osx
+        run: |
+          echo ${TARGET_PLATFORM}
+          export PATH=$PATH:/usr/local/opt/qt/bin
+          export CPATH=$CPATH:/usr/local/include/
+          qmake -config release
+          make -j$(nproc)
+          macdeployqt vulkanCapsViewer.app -dmg
+          cp vulkanCapsviewer.dmg Vulkan_Caps_Viewer-osx-arm64.dmg
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: "Vulkan_Caps_Viewer-osx-arm64"
+          path: "Vulkan_Caps_Viewer-osx-arm64.dmg"      
+        
+
   build_windows:
     name: Build Windows (64 bit)
     runs-on: windows-latest
