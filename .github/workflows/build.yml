@@ -190,8 +190,7 @@ jobs:
           export PATH="/opt/homebrew/opt/qt@5/bin:$PATH"
           export LDFLAGS="-L/opt/homebrew/opt/qt@5/lib"
           export CPPFLAGS="-I/opt/homebrew/opt/qt@5/include"
-#         export PATH=$PATH:/usr/local/opt/qt/bin
-          export CPATH=$CPATH:/usr/local/include/
+          export PATH=$PATH:/usr/local/opt/qt/bin
           qmake -config release QMAKE_APPLE_DEVICE_ARCHS=arm64
           make -j$(nproc)
           macdeployqt vulkanCapsViewer.app -dmg
